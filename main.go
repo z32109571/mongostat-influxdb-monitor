@@ -70,9 +70,11 @@ func main() {
 			tags["host"] = ip
 			tags["port"] = pConfig.Port
 			value = strings.Trim(value, "*")
-			if columes[index+2] == "set" || columes[index+2] == "repl" || columes[index+2] == "time" {
-				tags[columes[index+2]] = value
-				continue
+			if index+2 < len(columes){
+				if columes[index+2] == "set" || columes[index+2] == "repl" || columes[index+2] == "time" {
+					tags[columes[index+2]] = value
+					continue
+				}
 			}
 			if columes[index] == "locked-db" {
 				c := strings.Split(value, ":")
@@ -98,7 +100,7 @@ func main() {
 				}
 				fileds["qw"] = data2
 				continue
-			} else if columes[index+1] == "ar" {
+			} else if index+1<len(columes) && columes[index+1] == "ar" {
 				c := strings.Split(value, "|")
 				data1, err := strconv.Atoi(c[0])
 				if err != nil {
@@ -136,7 +138,9 @@ func main() {
 				}
 			} else {
 				if iTag > 0 && index+2 > iTag {
-					fileds[columes[index+2]] = unixtoFloat(value)
+					if index+2 < len(columes){
+						fileds[columes[index+2]] = unixtoFloat(value)
+					}
 				} else {
 					fileds[columes[index]] = unixtoFloat(value)
 				}
